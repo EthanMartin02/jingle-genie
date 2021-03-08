@@ -15,6 +15,19 @@ except:
     os.remove(f".cache-{username}")
     token = util.prompt_for_user_token(username)
 
+consumer_key = os.environ.get('TWITTER_API_KEY')
+consumer_secret = os.environ.get('TWITTER_API_KEY_SECRET')
+key = os.environ.get('ACCESS_TOKEN')
+secret = os.environ.get('ACCESS_TOKEN_SECRET')
+
+# Create Twitter authorization instance
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(key, secret)
+    
+api = tweepy.API(auth)
+api.update_status('tweepy + oauth!')
+
+
 # Create Spotipy object based off of user ID
 # stored in variable username.
 spotifyObject = spotipy.Spotify(auth=token)
