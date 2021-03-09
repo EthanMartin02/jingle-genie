@@ -72,7 +72,7 @@ def getTweets(twitterClient, mentions):
 # In the case of invalid inputs, the program will
 # catch the error and return an error message.
 def generateRecommendations(spotifyClient, user, tweet):
-    NUM_RECOMMENDATIONS = 4
+    NUM_RECOMMENDATIONS = 3
     result = "@" + user + ",\n"
     try:
         artistID = spotifyClient.search(tweet,1,0,"artist")['artists']['items'][0]['id']
@@ -81,8 +81,9 @@ def generateRecommendations(spotifyClient, user, tweet):
         return result
     list = []
     list.append(artistID)
-    trackList = spotifyClient.recommendations(list, None, None, NUM_RECOMMENDATIONS, 'US') # Generate 4 song recommendations
-    result += "Here are four recommended tracks for \"" + tweet + "\" (in no particular order):"
+    trackList = spotifyClient.recommendations(list, None, None, NUM_RECOMMENDATIONS, 'US') # Generate 3 song recommendations
+    result += "BOOM! Your wish has been granted.\n"
+    result += "Here are " + str(NUM_RECOMMENDATIONS) + " recommended tracks for \"" + tweet + "\" (in no particular order):"
     for i in range(NUM_RECOMMENDATIONS):
         trackName = trackList['tracks'][i]['name']
         artistName = trackList['tracks'][i]['artists'][0]['name']
