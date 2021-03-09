@@ -82,7 +82,7 @@ def generateRecommendations(spotifyClient, user, tweet):
     list = []
     list.append(artistID)
     trackList = spotifyClient.recommendations(list, None, None, NUM_RECOMMENDATIONS, 'US') # Generate 4 song recommendations
-    result += "Here are four recommended tracks for: \"" + tweet + "\"\n(in no particular order)\n"
+    result += "Here are four recommended tracks for \"" + tweet + "\" (in no particular order):"
     for i in range(NUM_RECOMMENDATIONS):
         trackName = trackList['tracks'][i]['name']
         artistName = trackList['tracks'][i]['artists'][0]['name']
