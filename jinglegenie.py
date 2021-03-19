@@ -39,37 +39,15 @@ def getMentions(twitterClient):
             count += 1
     return currMentions
 
-# Creates and returns a list of the users
-# that have mentioned the client Twitter account.
-# Parameter mentions represents all the mentions
-# that have not been replied to.
-def getUsers(mentions):
-    users = []
-    for i in range(len(mentions)):
-        nextUser = mentions[i].user.screen_name
-        users.insert(0, nextUser)
-    return users
-
-# Creates and returns a list of all the recommendation
-# requests that other Twitter users have made via mentions.
-# Parameter mentions represents all the mentions that have
-# not been replied to.
-def getTweets(twitterClient, mentions):
-    clientMention = "@" + twitterClient.me().screen_name
-    tweets = []
-    for i in range(len(mentions)):
-        twitterClient.create_favorite(mentions[i].id)
-        nextTweet = mentions[i].text.replace(clientMention, '')
-        tweets.insert(0, nextTweet)
-    return tweets
 
 # Takes what the user requested and returns a string
 # of recommendations if there is valid input.
 # In the case of invalid inputs, the program will
 # catch the error and return an error message.
-def generateRecommendations(spotifyClient, user, tweet):
+def generateRecommendations(spotifyClient, user, tweet, tweetID):
     NUM_RECOMMENDATIONS = 3
-    result = "@" + user + ",\n"
+    result = "https://twitter.com/" + user
+    result += "/status/" + str(tweetID) + "\n"
     try:
         artistID = spotifyClient.search(tweet,1,0,"artist")['artists']['items'][0]['id']
     except:
@@ -95,9 +73,12 @@ def main():
     spotifyClient = spotifyAPISetup()
     twitterClient = twitterAPISetup()
     mentions = getMentions(twitterClient)
-    users = getUsers(mentions)
-    tweets = getTweets(twitterClient, mentions)
+    clientMention = "@" + twitterClient.me().screen_name + " "
     for i in range(len(mentions)):
-        recommendation = generateRecommendations(spotifyClient, users[i], tweets[i])
-        twitterClient.update_status(recommendation)
+        recommendation = generateRecommendations(spotifyClient, mentions[i].user.screen_name,
+            mentions[i].text.replace(clientMention, ''), mentions[i].id)
+        tweet = twitterClient.update_status(recommendation)
+        twitterClient.create_favorite(mentions[i].id)
+        twitterClient.create_favorite(tweet.id)
         
+main()
