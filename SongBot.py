@@ -86,6 +86,10 @@ def generateRecommendations(spotifyClient, user, tweet):
         result += "\n" + str(i + 1) + ". " + trackName + " by " + artistName
     return result
 
+def lambda_handler(event, context):
+    main()
+    return
+
 # Main driver of the program
 def main():
     spotifyClient = spotifyAPISetup()
