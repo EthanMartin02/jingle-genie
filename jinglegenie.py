@@ -100,5 +100,4 @@ def main():
     for i in range(len(mentions)):
         recommendation = generateRecommendations(spotifyClient, users[i], tweets[i])
         twitterClient.update_status(recommendation)
-
-main()
+        
