@@ -1,34 +1,28 @@
-import os
-import sys
-import spotipy
-import json
-import spotipy.util as util
-import random
-import tweepy
+import config
 
 # Sets up an Object that can interact with
 # the Spotify API.
 def spotifyAPISetup():
-    username = os.environ.get('SPOTIPY_USERID')
+    username = config.os.environ.get('SPOTIPY_USERID')
     try:
-        token = util.prompt_for_user_token(username)
+        token = config.spotipy.util.prompt_for_user_token(username)
     except:
-        os.remove(f".cache-{username}")
-        token = util.prompt_for_user_token(username)
-    spotifyClient = spotipy.Spotify(auth=token)
+        config.os.remove(f".cache-{username}")
+        token = config.spotipy.util.prompt_for_user_token(username)
+    spotifyClient = config.spotipy.Spotify(auth=token)
     user = spotifyClient.current_user()
     return spotifyClient
 
 # Sets up an Object that can interact with the
 # Twitter API through a specific client account.
 def twitterAPISetup():
-    consumer_key = os.environ.get('TWITTER_API_KEY')
-    consumer_secret = os.environ.get('TWITTER_API_KEY_SECRET')
-    key = os.environ.get('ACCESS_TOKEN')
-    secret = os.environ.get('ACCESS_TOKEN_SECRET')
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    consumer_key = config.os.environ.get('TWITTER_API_KEY')
+    consumer_secret = config.os.environ.get('TWITTER_API_KEY_SECRET')
+    key = config.os.environ.get('ACCESS_TOKEN')
+    secret = config.os.environ.get('ACCESS_TOKEN_SECRET')
+    auth = config.tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(key, secret)
-    twitterClient = tweepy.API(auth)
+    twitterClient = config.tweepy.API(auth)
     return twitterClient
 
 # Returns a list of any new mentions that have not been
